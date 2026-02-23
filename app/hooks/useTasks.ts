@@ -1,20 +1,22 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getTasks, getTaskById } from "@/app/lib/fetcher";
 
-interface Task {
+export interface Task {
   id: string;
   title: string;
   completed: boolean;
 }
 
+const queryKeyFn = (limit: number) => ["tasks", limit];
 export function useTasksList(
   limit: number = 1000,
 ): UseQueryResult<Task[], Error> {
   return useQuery({
-    queryKey: ["tasks", limit],
+    queryKey: queryKeyFn(limit),
     queryFn: () => getTasks(limit),
   });
 }
+useTasksList.queryKey = queryKeyFn;
 
 /**
  * Hook to fetch a single task by ID using React Query
