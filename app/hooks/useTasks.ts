@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getTasks, getTaskById } from "@/app/lib/fetcher";
+import { useEffect, useState } from "react";
 
 export interface Task {
   id: string;
@@ -29,3 +30,18 @@ export function useTask(id: number): UseQueryResult<Task | null, Error> {
     queryFn: () => getTaskById(id),
   });
 }
+
+export const useGetTasksCustom = () => {
+  const [data, setQueryData] = useState<Task[]>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    getTasks(10)
+      .then(setQueryData)
+      .catch((e) => setError(e as Error))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  return { data, isLoading, error, setQueryData };
+};

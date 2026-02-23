@@ -3,21 +3,16 @@
 import Summary from "@/app/components/Summary";
 import AddTask from "@/app/components/AddTask";
 import TaskList from "@/app/components/TaskList";
-import { Task, useTasksList } from "@/app/hooks/useTasks";
-import { useQueryClient } from "@tanstack/react-query";
+import { useGetTasksCustom } from "@/app/hooks/useTasks";
 
-const limit = 10;
 export default function Home() {
-  const queryClient = useQueryClient();
-  const { data: tasks, isLoading, error } = useTasksList(limit);
+  const { data: tasks, isLoading, error, setQueryData } = useGetTasksCustom();
 
   const handleToggleTask = (id: string) => {
-    queryClient.setQueryData<Task[]>(
-      useTasksList.queryKey(limit),
-      (prevTasks) =>
-        prevTasks?.map((task) =>
-          task.id === id ? { ...task, completed: !task.completed } : task,
-        ),
+    setQueryData((prevTasks) =>
+      prevTasks?.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
     );
   };
 
@@ -27,10 +22,7 @@ export default function Home() {
       title: title,
       completed: false,
     };
-    queryClient.setQueryData<Task[]>(
-      useTasksList.queryKey(limit),
-      (prevTasks = []) => [newTask, ...prevTasks],
-    );
+    setQueryData((prevTasks = []) => [newTask, ...prevTasks]);
   };
 
   return (
