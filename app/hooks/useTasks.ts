@@ -27,6 +27,5 @@ export function useTask(id: number): UseQueryResult<Task | null, Error> {
   return useQuery({
     queryKey: ["task", id],
     queryFn: () => getTaskById(id),
-    enabled: !!id, // Only run query if id is provided
   });
 }
