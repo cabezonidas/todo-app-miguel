@@ -22,7 +22,7 @@ function TaskItem({ task, onToggle }: Readonly<TaskItemProps>) {
       <input
         type="checkbox"
         checked={task.completed}
-        
+        aria-label={task.title}
         className={`w-6 h-6 rounded-lg border-2 border-gray-300 cursor-pointer`}
       />
       <span
