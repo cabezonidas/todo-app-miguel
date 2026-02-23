@@ -12,7 +12,6 @@ interface TaskItemProps {
 function TaskItem({ task, onToggle }: Readonly<TaskItemProps>) {
   return (
     <div
-      onClick={() => onToggle(task.id)}
       className={`flex items-center gap-4 p-4 rounded-xl border-2 hover:shadow-md transition-all duration-200 cursor-pointer ${
         task.completed
           ? "border-gray-100 bg-green-50"
@@ -20,6 +19,7 @@ function TaskItem({ task, onToggle }: Readonly<TaskItemProps>) {
       }`}
     >
       <input
+        onChange={() => onToggle(task.id)}
         type="checkbox"
         checked={task.completed}
         aria-label={task.title}
