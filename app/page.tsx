@@ -8,14 +8,16 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const limit = 10;
 export default function Home() {
-  const { setQueryData } = useQueryClient();
+  const queryClient = useQueryClient();
   const { data: tasks, isLoading, error } = useTasksList(limit);
 
   const handleToggleTask = (id: string) => {
-    setQueryData<Task[]>(useTasksList.queryKey(limit), (prevTasks) =>
-      prevTasks?.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
+    queryClient.setQueryData<Task[]>(
+      useTasksList.queryKey(limit),
+      (prevTasks) =>
+        prevTasks?.map((task) =>
+          task.id === id ? { ...task, completed: !task.completed } : task,
+        ),
     );
   };
 
@@ -25,10 +27,10 @@ export default function Home() {
       title: title,
       completed: false,
     };
-    setQueryData<Task[]>(useTasksList.queryKey(limit), (prevTasks = []) => [
-      newTask,
-      ...prevTasks,
-    ]);
+    queryClient.setQueryData<Task[]>(
+      useTasksList.queryKey(limit),
+      (prevTasks = []) => [newTask, ...prevTasks],
+    );
   };
 
   return (
